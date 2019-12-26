@@ -3,7 +3,7 @@
  
 1. Open in IDE
 
-2. Configure database connection in src/main/resources/application.properties
+2. Configure database connection in **src/main/resources/application.properties**
 
 ```
 spring.datasource.username=USERNAME
