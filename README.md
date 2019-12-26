@@ -13,3 +13,36 @@ spring.jpa.hibernate.ddl-auto=update // Update database without destroy old sche
 ```
 
 3. Run
+
+
+4. Services
+
+```
+GET /users 
+Functions: Get all users
+
+GET /users/userNameorPassword
+Functions: Get user by username or password
+
+POST /users
+Body:
+{
+ username: String!
+ email: String!
+ address: String!
+}
+Functions: Get user by username or password
+
+PUT /users/userId
+Body:
+{
+ username: String
+ email: String
+ address: String
+}
+Functions: Update user by userId
+
+
+DELETE /users/userId
+Functions: Delete user by userID
+```
