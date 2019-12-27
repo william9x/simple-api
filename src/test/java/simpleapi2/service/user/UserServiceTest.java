@@ -7,13 +7,18 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import simpleapi2.dto.user.UserDTO;
 import simpleapi2.entity.user.UserEntity;
+import simpleapi2.middleware.utilities.string.IStringUtilities;
 import simpleapi2.repository.user.IUserRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 class UserServiceTest {
+
+    private UserEntity userEntity;
+    private UserDTO userDTO;
 
     @InjectMocks
     UserService userService;
@@ -21,83 +26,104 @@ class UserServiceTest {
     @Mock
     IUserRepository userRepository;
 
+    @Mock
+    IStringUtilities stringUtilities;
+
+
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+
+        userDTO = new UserDTO();
+        userDTO.setUsername("test DTO");
+        userDTO.setEmail("test@test.com");
+        userDTO.setAddress("test address");
+
+        userEntity = new UserEntity();
+        userEntity.setUsername("test Entity");
+        userEntity.setEmail("test@test.com");
+        userEntity.setAddress("test address");
+    }
+
+    @Test
+    final void testGetAllUser(){
+        when(userRepository.findAllByUsernameNotNull()).thenReturn(null);
+        assertThrows(RuntimeException.class, () -> userService.getUser());
     }
 
     @Test
     final void testGetUser() {
-        UserEntity user = new UserEntity();
-        user.setAddress("test address");
-        when(userRepository.findByUsername(anyString())).thenReturn(user);
 
-        UserDTO userDTO = userService.getUser("test");
+        when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
 
-        assertNotNull(userDTO);
-        assertEquals("test address", userDTO.getAddress());
+        UserDTO findUser = userService.getUser("test");
+
+        assertNotNull(findUser);
+        assertEquals("test address", findUser.getAddress());
+
     }
 
     @Test
-    final void testFindUser() {
+    final void testGetUser_findUser() {
+
         when(userRepository.findByUsername(anyString())).thenReturn(null);
         when(userRepository.findByEmail(anyString())).thenReturn(null);
 
-        assertThrows(RuntimeException.class,
-                () -> userService.getUser("test")
-        );
+        assertThrows(RuntimeException.class, () -> userService.getUser(anyString()));
     }
 
     @Test
-    final void createUser(){
-        UserEntity user = new UserEntity();
-        user.setUsername("test name");
-        user.setEmail("test mail");
-        user.setAddress("test address");
-        user.setUserId("test address");
+    final void testCreateUser() {
+
+        when(userRepository.findByUsername(anyString())).thenReturn(null);
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
+        when(stringUtilities.generateRandomString(anyInt())).thenReturn("testUID");
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
+
+        UserDTO createUser = userService.createUser(userDTO);
+
+        assertNotNull(createUser);
+        assertEquals("test Entity", createUser.getUsername());
     }
 
-//    @Test
-//    final void testValidateForUserCreate()
-//
-//    @Test
-//    final void testCheckIfRequiredFieldsNull()
-//
-//    @Test
-//    final void testCheckIfUniqueFieldsExist()
+    @Test
+    final void testCreateUser_validateForUserCreate() {
+        assertThrows(RuntimeException.class, () -> userService.createUser(new UserDTO()));
+    }
 
-//    @Test
-//    final void testIsUsernameFieldNull(){
-//        String username = null;
-//
-//
-//    }
-//
-//    @Test
-//    final void testIsEmailFieldNull(){
-//
-//    }
-//    @Test
-//    final void testIsAddressFieldNull(){
-//
-//    }
-//    @Test
-//    final void testIsUserIdExist(){
-//
-//    }
-//    @Test
-//    final void testIsUsernameExist(){
-//
-//    }
-//    @Test
-//    final void testIsEmailExist(){
-//
-//    }
-//
+    @Test
+    final void testUpdateUser() {
 
+        when(userRepository.findByUserId(anyString())).thenReturn(userEntity);
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
+        UserDTO updateUser = userService.updateUser(anyString(), new UserDTO());
 
+        assertNotNull(updateUser);
+        assertEquals("test Entity", updateUser.getUsername());
+    }
 
+    @Test
+    final void testUpdateUser_userNotFound() {
 
+        when(userRepository.findByUserId(anyString())).thenReturn(null);
 
+        assertThrows(RuntimeException.class, () -> userService.updateUser(anyString(), new UserDTO()));
+    }
+
+    @Test
+    final void testDeleteUser() {
+
+        when(userRepository.findByUserId(anyString())).thenReturn(userEntity);
+
+        assertDoesNotThrow( () -> userService.deleteUser(anyString()) );
+    }
+
+    @Test
+    final void testDeleteUser_userNotFound() {
+
+        when(userRepository.findByUserId(anyString())).thenReturn(null);
+
+        assertThrows(RuntimeException.class, () -> userService.deleteUser(anyString()));
+    }
 }

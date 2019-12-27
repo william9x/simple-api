@@ -45,17 +45,6 @@ public class UserService implements IUserService {
         return returnValue;
     }
 
-    private UserEntity findUser(String usernameOrEmail) {
-
-        UserEntity user;
-
-        if (isUsernameExist(usernameOrEmail)) user = userRepository.findByUsername(usernameOrEmail);
-        else if (isEmailExist(usernameOrEmail)) user = userRepository.findByEmail(usernameOrEmail);
-        else throw new RuntimeException("User not found");
-
-        return user;
-    }
-
     @Override
     public UserDTO createUser(UserDTO userDTO) {
 
@@ -70,16 +59,6 @@ public class UserService implements IUserService {
         BeanUtils.copyProperties(userRepository.save(userEntity), returnValue);
 
         return returnValue;
-    }
-
-    private String createUserId() {
-        int UserIdLength = 30;
-        String userId;
-
-        do userId = utilities.generateRandomString(UserIdLength);
-        while (isUserIdExist(userId));
-
-        return userId;
     }
 
     @Override
@@ -116,6 +95,27 @@ public class UserService implements IUserService {
         if (null == userEntity) throw new RuntimeException("User not found");
 
         userRepository.delete(userEntity);
+    }
+
+    private UserEntity findUser(String usernameOrEmail) {
+
+        UserEntity user;
+
+        if (isUsernameExist(usernameOrEmail)) user = userRepository.findByUsername(usernameOrEmail);
+        else if (isEmailExist(usernameOrEmail)) user = userRepository.findByEmail(usernameOrEmail);
+        else throw new RuntimeException("User not found");
+
+        return user;
+    }
+
+    private String createUserId() {
+        int UserIdLength = 30;
+        String userId;
+
+        do userId = utilities.generateRandomString(UserIdLength);
+        while (isUserIdExist(userId));
+
+        return userId;
     }
 
     private void validateForUserCreate(UserDTO userDTO) {
