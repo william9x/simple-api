@@ -24,15 +24,15 @@ public class UserController {
     public ArrayList<UserFullDetailsResponse> getUser() {
 
         ArrayList<UserDTO> userDTOS = userService.getUser();
-        ArrayList<UserFullDetailsResponse> userFullDetailsRespons = new ArrayList<>();
+        ArrayList<UserFullDetailsResponse> userFullDetailsResponses = new ArrayList<>();
 
         for (UserDTO userDTO : userDTOS) {
             UserFullDetailsResponse userFullDetailsResponse = new UserFullDetailsResponse();
             BeanUtils.copyProperties(userDTO, userFullDetailsResponse);
-            userFullDetailsRespons.add(userFullDetailsResponse);
+            userFullDetailsResponses.add(userFullDetailsResponse);
         }
 
-        return userFullDetailsRespons;
+        return userFullDetailsResponses;
     }
 
     @GetMapping(path = "/{usernameOrEmail}")
@@ -49,8 +49,6 @@ public class UserController {
     public UserDetailsResponse createUser(@RequestBody UserSignUpRequest userSignUpRequest) {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userSignUpRequest, userDTO);
-
-        userService.validateForUserCreate(userDTO);
 
         UserDetailsResponse returnValue = new UserDetailsResponse();
         BeanUtils.copyProperties(userService.createUser(userDTO), returnValue);

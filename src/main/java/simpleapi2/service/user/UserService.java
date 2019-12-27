@@ -59,6 +59,8 @@ public class UserService implements IUserService {
     @Override
     public UserDTO createUser(UserDTO userDTO) {
 
+        validateForUserCreate(userDTO);
+
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userDTO, userEntity);
 
@@ -116,8 +118,7 @@ public class UserService implements IUserService {
         userRepository.delete(userEntity);
     }
 
-    @Override
-    public void validateForUserCreate(UserDTO userDTO) {
+    private void validateForUserCreate(UserDTO userDTO) {
         checkIfRequiredFieldsNull(userDTO);
         checkIfUniqueFieldsExist(userDTO);
     }

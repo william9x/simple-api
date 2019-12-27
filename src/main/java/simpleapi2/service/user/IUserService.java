@@ -9,5 +9,4 @@ public interface IUserService {
     UserDTO createUser(UserDTO userDTO);
     UserDTO updateUser(String userId, UserDTO userDTO);
     void deleteUser(String userId);
-    void validateForUserCreate(UserDTO userDTO);
 }
