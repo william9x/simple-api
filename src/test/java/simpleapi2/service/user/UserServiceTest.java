@@ -32,7 +32,7 @@ class UserServiceTest {
 
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         MockitoAnnotations.initMocks(this);
 
         userDTO = new UserDTO();
@@ -47,7 +47,7 @@ class UserServiceTest {
     }
 
     @Test
-    final void testGetAllUser(){
+    final void testGetAllUser() {
 
         ArrayList<UserEntity> userEntities = new ArrayList<>();
         userEntities.add(userEntity);
@@ -62,7 +62,7 @@ class UserServiceTest {
     }
 
     @Test
-    final void testGetAllUser_userNotFound(){
+    final void testGetAllUser_userNotFound() {
 
         when(userRepository.findAllByUsernameNotNull()).thenReturn(null);
 
@@ -74,10 +74,10 @@ class UserServiceTest {
 
         when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
 
-        UserDTO findUser = userService.getUser("test");
+        UserDTO findUser = userService.getUser(anyString());
 
         assertNotNull(findUser);
-        assertEquals("test address", findUser.getAddress());
+        assertEquals(userEntity.getUsername(), findUser.getUsername());
 
     }
 
@@ -101,7 +101,7 @@ class UserServiceTest {
         UserDTO createUser = userService.createUser(userDTO);
 
         assertNotNull(createUser);
-        assertEquals("test Entity", createUser.getUsername());
+        assertEquals(userEntity.getUsername(), createUser.getUsername());
     }
 
     @Test
@@ -134,7 +134,7 @@ class UserServiceTest {
         UserDTO updateUser = userService.updateUser(anyString(), new UserDTO());
 
         assertNotNull(updateUser);
-        assertEquals("test Entity", updateUser.getUsername());
+        assertEquals(userEntity.getUsername(), updateUser.getUsername());
     }
 
     @Test
@@ -150,7 +150,7 @@ class UserServiceTest {
 
         when(userRepository.findByUserId(anyString())).thenReturn(userEntity);
 
-        assertDoesNotThrow( () -> userService.deleteUser(anyString()) );
+        assertDoesNotThrow(() -> userService.deleteUser(anyString()));
     }
 
     @Test
