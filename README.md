@@ -21,7 +21,7 @@ GET /users
 Functions: Get all users
 
 
-GET /users/userNameorPassword
+GET /users/{userNameorPassword}
 Function: Get user by username or password
 
 
@@ -35,7 +35,7 @@ Body:
 Function: Get user by username or password
 
 
-PUT /users/userId
+PUT /users/{userId}
 Body:
 {
  username: String
@@ -45,7 +45,7 @@ Body:
 Function: Update user by userId
 
 
-DELETE /users/userId
+DELETE /users/{userId}
 Function: Delete user by userID
 ```
 
