@@ -5,20 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import simpleapi2.dto.user.UserDTO;
 import simpleapi2.entity.user.UserEntity;
-import simpleapi2.middleware.utilities.string.IStringUtilities;
 import simpleapi2.repository.user.IUserRepository;
 
 import java.util.ArrayList;
+import java.util.Base64;
 
 @Service
 public class UserService implements IUserService {
 
     @Autowired
     IUserRepository userRepository;
-
-    @Autowired
-    IStringUtilities utilities;
-
 
     @Override
     public ArrayList<UserDTO> getUser() {
@@ -53,7 +49,9 @@ public class UserService implements IUserService {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userDTO, userEntity);
 
-        userEntity.setUserId(createUserId());
+        String UUID = Base64.getUrlEncoder().withoutPadding().encodeToString(userEntity.getUsername().getBytes());
+
+        userEntity.setUserId(UUID);
 
         UserDTO returnValue = new UserDTO();
         BeanUtils.copyProperties(userRepository.save(userEntity), returnValue);
@@ -64,7 +62,6 @@ public class UserService implements IUserService {
     @Override
     public UserDTO updateUser(String userId, UserDTO userDTO) {
 
-        String updateUsername = userDTO.getUsername();
         String updateEmail = userDTO.getEmail();
         String updateAddress = userDTO.getAddress();
 
@@ -72,10 +69,6 @@ public class UserService implements IUserService {
 
         if (null == userEntity) throw new RuntimeException("User not found");
 
-        if (false == isUsernameFieldNull(updateUsername)) {
-            if (isUsernameExist(updateUsername)) throw new RuntimeException("Update user failed");
-            userEntity.setUsername(updateUsername);
-        }
         if (false == isEmailFieldNull(updateEmail)) {
             if (isEmailExist(updateEmail)) throw new RuntimeException("Update user failed");
             userEntity.setEmail(updateEmail);
@@ -108,16 +101,6 @@ public class UserService implements IUserService {
         return user;
     }
 
-    private String createUserId() {
-        int UserIdLength = 30;
-        String userId;
-
-        do userId = utilities.generateRandomString(UserIdLength);
-        while (isUserIdExist(userId));
-
-        return userId;
-    }
-
     private void validateForUserCreate(UserDTO userDTO) {
         checkIfRequiredFieldsNull(userDTO);
         checkIfUniqueFieldsExist(userDTO);
@@ -146,11 +129,6 @@ public class UserService implements IUserService {
 
     private boolean isAddressFieldNull(String address) {
         if (null == address) return true;
-        else return false;
-    }
-
-    private boolean isUserIdExist(String userId) {
-        if (null != userRepository.findByUserId(userId)) return true;
         else return false;
     }
 

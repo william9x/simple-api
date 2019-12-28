@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import simpleapi2.dto.user.UserDTO;
 import simpleapi2.entity.user.UserEntity;
-import simpleapi2.middleware.utilities.string.IStringUtilities;
 import simpleapi2.repository.user.IUserRepository;
 
 import java.util.ArrayList;
@@ -26,10 +25,6 @@ class UserServiceTest {
 
     @Mock
     IUserRepository userRepository;
-
-    @Mock
-    IStringUtilities stringUtilities;
-
 
     @BeforeEach
     void setUp() {
@@ -95,7 +90,6 @@ class UserServiceTest {
 
         when(userRepository.findByUsername(anyString())).thenReturn(null);
         when(userRepository.findByEmail(anyString())).thenReturn(null);
-        when(stringUtilities.generateRandomString(anyInt())).thenReturn("testUID");
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
         UserDTO createUser = userService.createUser(userDTO);

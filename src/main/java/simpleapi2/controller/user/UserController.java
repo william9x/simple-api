@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import simpleapi2.dto.user.UserDTO;
+import simpleapi2.entity.user.UserEntity;
 import simpleapi2.io.request.UserSignUpRequest;
 import simpleapi2.io.request.UserUpdateRequest;
 import simpleapi2.io.response.OperationStatus;
