@@ -10,8 +10,9 @@ import simpleapi2.entity.user.UserEntity;
 import simpleapi2.middleware.utilities.string.IStringUtilities;
 import simpleapi2.repository.user.IUserRepository;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +48,24 @@ class UserServiceTest {
 
     @Test
     final void testGetAllUser(){
+
+        ArrayList<UserEntity> userEntities = new ArrayList<>();
+        userEntities.add(userEntity);
+
+        when(userRepository.findAllByUsernameNotNull()).thenReturn(userEntities);
+
+        ArrayList<UserDTO> userDTOS = userService.getUser();
+
+        assertNotNull(userDTOS);
+        assertEquals(1, userDTOS.size());
+        assertEquals(userDTOS.get(0).getUsername(), userEntity.getUsername());
+    }
+
+    @Test
+    final void testGetAllUser_userNotFound(){
+
         when(userRepository.findAllByUsernameNotNull()).thenReturn(null);
+
         assertThrows(RuntimeException.class, () -> userService.getUser());
     }
 
@@ -64,7 +82,7 @@ class UserServiceTest {
     }
 
     @Test
-    final void testGetUser_findUser() {
+    final void testGetUser_userNotFound() {
 
         when(userRepository.findByUsername(anyString())).thenReturn(null);
         when(userRepository.findByEmail(anyString())).thenReturn(null);
@@ -87,8 +105,24 @@ class UserServiceTest {
     }
 
     @Test
-    final void testCreateUser_validateForUserCreate() {
+    final void testCreateUser_checkIfRequiredFieldsNull() {
         assertThrows(RuntimeException.class, () -> userService.createUser(new UserDTO()));
+    }
+
+    @Test
+    final void testCreateUser_checkIfUniqueFieldsExist_username() {
+        when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
+
+        userDTO.setUsername(userEntity.getUsername());
+        assertThrows(RuntimeException.class, () -> userService.createUser(userDTO));
+    }
+
+    @Test
+    final void testCreateUser_checkIfUniqueFieldsExist_email() {
+        when(userRepository.findByEmail(anyString())).thenReturn(userEntity);
+
+        userDTO.setEmail(userEntity.getEmail());
+        assertThrows(RuntimeException.class, () -> userService.createUser(userDTO));
     }
 
     @Test
