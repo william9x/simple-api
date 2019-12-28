@@ -1,5 +1,4 @@
 # Simple API for User CRUD
-
  
 1. Open in IDE
 
@@ -49,3 +48,5 @@ Function: Update user by userId
 DELETE /users/userId
 Function: Delete user by userID
 ```
+
+### Live demo: http://oasisvn.tk:1604/
