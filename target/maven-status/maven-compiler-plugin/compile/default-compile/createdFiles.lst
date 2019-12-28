@@ -1,0 +1,12 @@
+simpleapi2/entity/user/UserEntity.class
+simpleapi2/io/response/UserDetailsResponse.class
+simpleapi2/Api2Application.class
+simpleapi2/io/request/UserSignUpRequest.class
+simpleapi2/service/user/UserService.class
+simpleapi2/dto/user/UserDTO.class
+simpleapi2/controller/user/UserController.class
+simpleapi2/service/user/IUserService.class
+simpleapi2/io/response/UserFullDetailsResponse.class
+simpleapi2/io/response/OperationStatus.class
+simpleapi2/io/request/UserUpdateRequest.class
+simpleapi2/repository/user/IUserRepository.class

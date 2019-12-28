@@ -1,0 +1,12 @@
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/io/response/UserDetailsResponse.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/repository/user/IUserRepository.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/io/response/OperationStatus.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/io/response/UserFullDetailsResponse.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/service/user/IUserService.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/service/user/UserService.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/Api2Application.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/io/request/UserSignUpRequest.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/dto/user/UserDTO.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/io/request/UserUpdateRequest.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/controller/user/UserController.java
+/Users/hoangnam/Projects/Java/api2/src/main/java/simpleapi2/entity/user/UserEntity.java
