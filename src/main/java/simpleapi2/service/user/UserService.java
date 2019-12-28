@@ -14,7 +14,7 @@ import java.util.Base64;
 public class UserService implements IUserService {
 
     @Autowired
-    IUserRepository userRepository;
+    private IUserRepository userRepository;
 
     @Override
     public ArrayList<UserDTO> getUser() {

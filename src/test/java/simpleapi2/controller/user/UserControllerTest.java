@@ -30,13 +30,13 @@ class UserControllerTest {
     private UserDetailsResponse userDetailsResponse;
 
     @InjectMocks
-    UserController userController;
+    private UserController userController;
 
     @Mock
-    UserService userService;
+    private UserService userService;
 
     @Mock
-    IUserRepository userRepository;
+    private IUserRepository userRepository;
 
     @BeforeEach
     void setUp() {

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class UserController {
 
     @Autowired
-    IUserService userService;
+    private IUserService userService;
 
     @GetMapping()
     public ArrayList<UserFullDetailsResponse> getUser() {

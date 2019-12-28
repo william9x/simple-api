@@ -21,10 +21,10 @@ class UserServiceTest {
     private UserDTO userDTO;
 
     @InjectMocks
-    UserService userService;
+    private UserService userService;
 
     @Mock
-    IUserRepository userRepository;
+    private IUserRepository userRepository;
 
     @BeforeEach
     void setUp() {
