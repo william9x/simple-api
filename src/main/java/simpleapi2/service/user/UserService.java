@@ -16,49 +16,61 @@ public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
 
-    private static String testStatic = "test";
-
     @Override
     public ArrayList<UserDTO> getUser() {
 
         ArrayList<UserEntity> userEntities = userRepository.findAllByUsernameNotNull();
-        ArrayList<UserDTO> userDTOS = new ArrayList<>();
 
-        for (UserEntity userEntity : userEntities) {
-            UserDTO userDTO = new UserDTO();
-            BeanUtils.copyProperties(userEntity, userDTO);
-            userDTOS.add(userDTO);
+        if (userEntities.isEmpty()) return null;
+        else {
+            ArrayList<UserDTO> userDTOS = new ArrayList<>();
+
+            for (UserEntity userEntity : userEntities) {
+                UserDTO userDTO = new UserDTO();
+                BeanUtils.copyProperties(userEntity, userDTO);
+                userDTOS.add(userDTO);
+            }
+
+            return userDTOS;
         }
-
-        return userDTOS;
     }
 
     @Override
     public UserDTO getUser(String usernameOrEmail) {
 
-        UserEntity userEntity = findUser(usernameOrEmail);
-        UserDTO returnValue = new UserDTO();
-        BeanUtils.copyProperties(userEntity, returnValue);
+        UserEntity userEntity;
 
-        return returnValue;
+        userEntity = userRepository.findByUsername(usernameOrEmail);
+        if (null == userEntity) userEntity = userRepository.findByEmail(usernameOrEmail);
+
+        if (null == userEntity) return null;
+        else {
+            UserDTO returnValue = new UserDTO();
+            BeanUtils.copyProperties(userEntity, returnValue);
+
+            return returnValue;
+        }
     }
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
 
-        validateForUserCreate(userDTO);
+        if (isUsernameExist(userDTO.getUsername()) || isEmailExist(userDTO.getEmail())) {
+            return null;
+        } else {
 
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userDTO, userEntity);
+            UserEntity userEntity = new UserEntity();
+            BeanUtils.copyProperties(userDTO, userEntity);
 
-        String UUID = Base64.getUrlEncoder().withoutPadding().encodeToString(userEntity.getUsername().getBytes());
+            String UUID = Base64.getUrlEncoder().withoutPadding().encodeToString(userEntity.getUsername().getBytes());
 
-        userEntity.setUserId(UUID);
+            userEntity.setUserId(UUID);
 
-        UserDTO returnValue = new UserDTO();
-        BeanUtils.copyProperties(userRepository.save(userEntity), returnValue);
+            UserDTO returnValue = new UserDTO();
+            BeanUtils.copyProperties(userRepository.save(userEntity), returnValue);
 
-        return returnValue;
+            return returnValue;
+        }
     }
 
     @Override
@@ -68,74 +80,42 @@ public class UserService implements IUserService {
         String updateAddress = userDTO.getAddress();
 
         UserEntity userEntity = userRepository.findByUserId(userId);
-        if (null == userEntity) throw new RuntimeException("User not found");
+        if (null == userEntity) return null;
+        else {
+            if (null != updateEmail &&
+                    updateEmail.trim().length() > 0 &&
+                    !isEmailExist(updateEmail))
+            {
+                userEntity.setEmail(updateEmail);
+            }
 
-        if (false == isEmailFieldNull(updateEmail)) {
-            if (isEmailExist(updateEmail)) throw new RuntimeException("Update user failed");
-            userEntity.setEmail(updateEmail);
+            if (null != updateEmail) {
+                userEntity.setAddress(updateAddress);
+            }
+
+            UserDTO returnValue = new UserDTO();
+            BeanUtils.copyProperties(userRepository.save(userEntity), returnValue);
+
+            return returnValue;
         }
-        if (false == isAddressFieldNull(updateAddress)) userEntity.setAddress(updateAddress);
-
-        UserDTO returnValue = new UserDTO();
-        BeanUtils.copyProperties(userRepository.save(userEntity), returnValue);
-
-        return returnValue;
     }
 
     @Override
-    public void deleteUser(String userId) {
+    public boolean deleteUser(String userId) {
 
         UserEntity userEntity = userRepository.findByUserId(userId);
-        if (null == userEntity) throw new RuntimeException("User not found");
-
-        userRepository.delete(userEntity);
+        if (null == userEntity) return false;
+        else {
+            userRepository.delete(userEntity);
+            return true;
+        }
     }
 
-    private UserEntity findUser(String usernameOrEmail) {
-
-        UserEntity user;
-
-        if (isUsernameExist(usernameOrEmail)) user = userRepository.findByUsername(usernameOrEmail);
-        else if (isEmailExist(usernameOrEmail)) user = userRepository.findByEmail(usernameOrEmail);
-        else throw new RuntimeException("User not found");
-
-        return user;
+    private boolean isUsernameExist(String username) {
+        return userRepository.existsByUsername(username);
     }
-
-    private void validateForUserCreate(UserDTO userDTO) {
-        checkIfRequiredFieldsNull(userDTO);
-        checkIfUniqueFieldsExist(userDTO);
-    }
-
-    private void checkIfRequiredFieldsNull(UserDTO userDTO) {
-        if (isUsernameFieldNull(userDTO.getUsername())) throw new RuntimeException("Missing username");
-        if (isAddressFieldNull(userDTO.getAddress())) throw new RuntimeException("Missing address");
-        if (isEmailFieldNull(userDTO.getEmail())) throw new RuntimeException("Missing email");
-    }
-
-    private void checkIfUniqueFieldsExist(UserDTO userDTO) {
-        if (isUsernameExist(userDTO.getUsername()) || isEmailExist(userDTO.getEmail()))
-            throw new RuntimeException("Create user failed");
-    }
-
-    private boolean isUsernameFieldNull(String username) {
-        if (null == username) return true;
-        else return false;
-    }
-
-    private boolean isEmailFieldNull(String email) {
-        if (null == email) return true;
-        else return false;
-    }
-
-    private boolean isAddressFieldNull(String address) {
-        if (null == address) return true;
-        else return false;
-    }
-
-    private boolean isUsernameExist(String username) { return userRepository.existsByUsername(username);  }
 
     private boolean isEmailExist(String email) {
-       return userRepository.existsByEmail(email);
+        return userRepository.existsByEmail(email);
     }
 }
