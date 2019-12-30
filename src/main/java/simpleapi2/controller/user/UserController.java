@@ -52,14 +52,18 @@ public class UserController {
         UserDTO userDTO = userService.getUser(usernameOrEmail);
 
         if (null == userDTO) {
-            operationStatus = new OperationStatus(HttpStatus.NOT_FOUND.value(), ErrorResponse.NO_RECORD_FOUND.getErrorMessage(), null);
+            operationStatus = new OperationStatus(HttpStatus.NOT_FOUND.value(),
+                    ErrorResponse.NO_RECORD_FOUND.getErrorMessage(), null);
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(operationStatus);
         } else {
 
             UserFullDetailsResponse returnValue = new UserFullDetailsResponse();
             BeanUtils.copyProperties(userDTO, returnValue);
 
-            operationStatus = new OperationStatus(HttpStatus.OK.value(), SuccessResponse.FOUND_RECORD.getSuccessResponse(), returnValue);
+            operationStatus = new OperationStatus(HttpStatus.OK.value(),
+                    SuccessResponse.FOUND_RECORD.getSuccessResponse(), returnValue);
+
             return ResponseEntity.status(HttpStatus.OK).body(operationStatus);
         }
 
@@ -74,14 +78,18 @@ public class UserController {
 
         UserDTO createdUser = userService.createUser(userDTO);
         if (null == createdUser) {
-            operationStatus = new OperationStatus(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorResponse.COULD_NOT_CREATE_RECORD.getErrorMessage(), null);
+            operationStatus = new OperationStatus(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    ErrorResponse.COULD_NOT_CREATE_RECORD.getErrorMessage(), null);
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(operationStatus);
 
         } else {
             UserDetailsResponse returnValue = new UserDetailsResponse();
             BeanUtils.copyProperties(createdUser, returnValue);
 
-            operationStatus = new OperationStatus(HttpStatus.CREATED.value(), SuccessResponse.CREATED_RECORD.getSuccessResponse(), returnValue);
+            operationStatus = new OperationStatus(HttpStatus.CREATED.value(),
+                    SuccessResponse.CREATED_RECORD.getSuccessResponse(), returnValue);
+
             return ResponseEntity.status(HttpStatus.CREATED).body(operationStatus);
         }
     }
@@ -96,14 +104,18 @@ public class UserController {
         UserDTO updatedUser = userService.updateUser(userId, userDTO);
 
         if (null == updatedUser) {
-            operationStatus = new OperationStatus(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorResponse.COULD_NOT_UPDATE_RECORD.getErrorMessage(), null);
+            operationStatus = new OperationStatus(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    ErrorResponse.COULD_NOT_UPDATE_RECORD.getErrorMessage(), null);
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(operationStatus);
 
         } else {
             UserDetailsResponse returnValue = new UserDetailsResponse();
             BeanUtils.copyProperties(updatedUser, returnValue);
 
-            operationStatus = new OperationStatus(HttpStatus.CREATED.value(), SuccessResponse.UPDATED_RECORD.getSuccessResponse(), returnValue);
+            operationStatus = new OperationStatus(HttpStatus.CREATED.value(),
+                    SuccessResponse.UPDATED_RECORD.getSuccessResponse(), returnValue);
+
             return ResponseEntity.status(HttpStatus.CREATED).body(operationStatus);
         }
     }
@@ -115,11 +127,15 @@ public class UserController {
         boolean deletedUser = userService.deleteUser(userId);
 
         if (false == deletedUser) {
-            operationStatus = new OperationStatus(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorResponse.COULD_NOT_DELETE_RECORD.getErrorMessage(), null);
+            operationStatus = new OperationStatus(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    ErrorResponse.COULD_NOT_DELETE_RECORD.getErrorMessage(), null);
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(operationStatus);
 
         } else {
-            operationStatus = new OperationStatus(HttpStatus.OK.value(), SuccessResponse.DELETED_RECORD.getSuccessResponse(), null);
+            operationStatus = new OperationStatus(HttpStatus.OK.value(),
+                    SuccessResponse.DELETED_RECORD.getSuccessResponse(), null);
+
             return ResponseEntity.status(HttpStatus.OK).body(operationStatus);
         }
     }
