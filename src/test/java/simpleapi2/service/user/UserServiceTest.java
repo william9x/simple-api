@@ -67,9 +67,10 @@ class UserServiceTest {
     @Test
     final void testGetUser() {
 
+        when(userRepository.existsByUsername(anyString())).thenReturn(true);
         when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
 
-        UserDTO findUser = userService.getUser(anyString());
+        UserDTO findUser = userService.getUser("");
 
         assertNotNull(findUser);
         assertEquals(userEntity.getUsername(), findUser.getUsername());

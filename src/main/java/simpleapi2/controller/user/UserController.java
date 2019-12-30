@@ -2,9 +2,10 @@ package simpleapi2.controller.user;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import simpleapi2.dto.user.UserDTO;
-import simpleapi2.entity.user.UserEntity;
 import simpleapi2.io.request.UserSignUpRequest;
 import simpleapi2.io.request.UserUpdateRequest;
 import simpleapi2.io.response.OperationStatus;
@@ -36,8 +37,18 @@ public class UserController {
         return userFullDetailsResponses;
     }
 
+//    @GetMapping(path = "/{usernameOrEmail}")
+//    public ResponseEntity<UserFullDetailsResponse>  getUser(@PathVariable String usernameOrEmail) {
+//
+//        UserDTO userDTO = userService.getUser(usernameOrEmail);
+//        UserFullDetailsResponse returnValue = new UserFullDetailsResponse();
+//        BeanUtils.copyProperties(userDTO, returnValue);
+//
+//        return new ResponseEntity<>(returnValue, HttpStatus.ACCEPTED);
+//    }
+
     @GetMapping(path = "/{usernameOrEmail}")
-    public UserFullDetailsResponse getUser(@PathVariable String usernameOrEmail) {
+    public UserFullDetailsResponse  getUser(@PathVariable String usernameOrEmail) {
 
         UserDTO userDTO = userService.getUser(usernameOrEmail);
         UserFullDetailsResponse returnValue = new UserFullDetailsResponse();

@@ -16,15 +16,17 @@ public class UserService implements IUserService {
     @Autowired
     private IUserRepository userRepository;
 
+    private static String testStatic = "test";
+
     @Override
     public ArrayList<UserDTO> getUser() {
 
         ArrayList<UserEntity> userEntities = userRepository.findAllByUsernameNotNull();
         ArrayList<UserDTO> userDTOS = new ArrayList<>();
 
-        for (UserEntity source : userEntities) {
+        for (UserEntity userEntity : userEntities) {
             UserDTO userDTO = new UserDTO();
-            BeanUtils.copyProperties(source, userDTO);
+            BeanUtils.copyProperties(userEntity, userDTO);
             userDTOS.add(userDTO);
         }
 
@@ -66,7 +68,6 @@ public class UserService implements IUserService {
         String updateAddress = userDTO.getAddress();
 
         UserEntity userEntity = userRepository.findByUserId(userId);
-
         if (null == userEntity) throw new RuntimeException("User not found");
 
         if (false == isEmailFieldNull(updateEmail)) {
@@ -132,13 +133,9 @@ public class UserService implements IUserService {
         else return false;
     }
 
-    private boolean isUsernameExist(String username) {
-        if (null != userRepository.findByUsername(username)) return true;
-        else return false;
-    }
+    private boolean isUsernameExist(String username) { return userRepository.existsByUsername(username);  }
 
     private boolean isEmailExist(String email) {
-        if (null != userRepository.findByEmail(email)) return true;
-        else return false;
+       return userRepository.existsByEmail(email);
     }
 }
