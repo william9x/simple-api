@@ -17,12 +17,17 @@ spring.jpa.hibernate.ddl-auto=update // Update database without destroy old sche
 4. Services
 
 ```
+All request must have this header:
+{
+ Authentication: simple_api_key_for_authentication
+}
+
 GET /users 
-Functions: Get all users
+Operation: Get all users
 
 
 GET /users/{userNameorPassword}
-Function: Get user by username or password
+Operation: Get user by username or password
 
 
 POST /users
@@ -32,21 +37,20 @@ Body:
  email: String!
  address: String!
 }
-Function: Get user by username or password
+Operation: Get user by username or password
 
 
 PUT /users/{userId}
 Body:
 {
- username: String
  email: String
  address: String
 }
-Function: Update user by userId
+Operation: Update user by userId
 
 
 DELETE /users/{userId}
-Function: Delete user by userID
+Operation: Delete user by userID
 ```
 
 ### Live demo: http://oasisvn.tk:1604/
