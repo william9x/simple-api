@@ -57,19 +57,12 @@ class UserServiceTest {
     }
 
     @Test
-    final void testGetAllUser_userNotFound() {
-
-        when(userRepository.findAllByUsernameNotNull()).thenReturn(null);
-
-        assertThrows(RuntimeException.class, () -> userService.getUser());
-    }
-
-    @Test
     final void testGetUser() {
 
+        when(userRepository.existsByUsername(anyString())).thenReturn(true);
         when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
 
-        UserDTO findUser = userService.getUser(anyString());
+        UserDTO findUser = userService.getUser("");
 
         assertNotNull(findUser);
         assertEquals(userEntity.getUsername(), findUser.getUsername());
@@ -82,7 +75,10 @@ class UserServiceTest {
         when(userRepository.findByUsername(anyString())).thenReturn(null);
         when(userRepository.findByEmail(anyString())).thenReturn(null);
 
-        assertThrows(RuntimeException.class, () -> userService.getUser(anyString()));
+        UserDTO findUser = userService.getUser("");
+
+        assertNull(findUser);
+
     }
 
     @Test
@@ -99,27 +95,6 @@ class UserServiceTest {
     }
 
     @Test
-    final void testCreateUser_checkIfRequiredFieldsNull() {
-        assertThrows(RuntimeException.class, () -> userService.createUser(new UserDTO()));
-    }
-
-    @Test
-    final void testCreateUser_checkIfUniqueFieldsExist_username() {
-        when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
-
-        userDTO.setUsername(userEntity.getUsername());
-        assertThrows(RuntimeException.class, () -> userService.createUser(userDTO));
-    }
-
-    @Test
-    final void testCreateUser_checkIfUniqueFieldsExist_email() {
-        when(userRepository.findByEmail(anyString())).thenReturn(userEntity);
-
-        userDTO.setEmail(userEntity.getEmail());
-        assertThrows(RuntimeException.class, () -> userService.createUser(userDTO));
-    }
-
-    @Test
     final void testUpdateUser() {
 
         when(userRepository.findByUserId(anyString())).thenReturn(userEntity);
@@ -132,14 +107,6 @@ class UserServiceTest {
     }
 
     @Test
-    final void testUpdateUser_userNotFound() {
-
-        when(userRepository.findByUserId(anyString())).thenReturn(null);
-
-        assertThrows(RuntimeException.class, () -> userService.updateUser(anyString(), new UserDTO()));
-    }
-
-    @Test
     final void testDeleteUser() {
 
         when(userRepository.findByUserId(anyString())).thenReturn(userEntity);
@@ -147,11 +114,4 @@ class UserServiceTest {
         assertDoesNotThrow(() -> userService.deleteUser(anyString()));
     }
 
-    @Test
-    final void testDeleteUser_userNotFound() {
-
-        when(userRepository.findByUserId(anyString())).thenReturn(null);
-
-        assertThrows(RuntimeException.class, () -> userService.deleteUser(anyString()));
-    }
 }
