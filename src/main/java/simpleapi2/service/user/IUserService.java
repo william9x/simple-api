@@ -8,5 +8,5 @@ public interface IUserService {
     UserDTO getUser(String usernameOrEmail);
     UserDTO createUser(UserDTO userDTO);
     UserDTO updateUser(String userId, UserDTO userDTO);
-    void deleteUser(String userId);
+    boolean deleteUser(String userId);
 }
