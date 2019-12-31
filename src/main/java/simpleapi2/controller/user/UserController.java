@@ -1,5 +1,9 @@
 package simpleapi2.controller.user;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +19,20 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("api/users")
+@Api(value = "User APIs")
 public class UserController {
 
     @Autowired
     private IUserService userService;
 
+    @ApiOperation(value = "Get all user", response = OperationStatus.class, responseContainer = "List")
+    @ApiResponses({
+            @ApiResponse(code = 200, message="OK"),
+            @ApiResponse(code = 403, message="Forbidden"),
+            @ApiResponse(code = 404, message="Not found"),
+            @ApiResponse(code = 500, message="Internal Server Error"),
+    })
     @GetMapping()
     public ResponseEntity<?> getUser() {
         OperationStatus operationStatus;
@@ -45,6 +57,13 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="Get a user by userId", response = OperationStatus.class)
+    @ApiResponses({
+            @ApiResponse(code = 200, message="OK"),
+            @ApiResponse(code = 403, message="Forbidden"),
+            @ApiResponse(code = 404, message="Not found"),
+            @ApiResponse(code = 500, message="Internal Server Error"),
+    })
     @GetMapping(path = "/{usernameOrEmail}")
     public ResponseEntity<?> getUser(@PathVariable String usernameOrEmail) {
         OperationStatus operationStatus;
@@ -69,6 +88,12 @@ public class UserController {
 
     }
 
+    @ApiOperation(value="Create a user", response = OperationStatus.class)
+    @ApiResponses({
+            @ApiResponse(code = 201, message="Created"),
+            @ApiResponse(code = 403, message="Forbidden"),
+            @ApiResponse(code = 500, message="Internal Server Error"),
+    })
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody @Valid UserSignUpRequest userSignUpRequest) {
         OperationStatus operationStatus;
@@ -94,6 +119,12 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="Update a user by userId", response = OperationStatus.class)
+    @ApiResponses({
+            @ApiResponse(code = 201, message="Updated"),
+            @ApiResponse(code = 403, message="Forbidden"),
+            @ApiResponse(code = 500, message="Internal Server Error"),
+    })
     @PutMapping(path = "/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody @Valid UserUpdateRequest userUpdateRequest) {
         OperationStatus operationStatus;
@@ -120,6 +151,12 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value="Delete user by userId", response = OperationStatus.class)
+    @ApiResponses({
+            @ApiResponse(code = 200, message="OK"),
+            @ApiResponse(code = 403, message="Forbidden"),
+            @ApiResponse(code = 500, message="Internal Server Error"),
+    })
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable String userId) {
 
