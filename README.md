@@ -14,7 +14,7 @@ spring.jpa.hibernate.ddl-auto=update // Update database without destroy old sche
 3. Run
 
 
-4. Services
+4. Requests
 
 ```
 All request must have this header:
@@ -52,4 +52,5 @@ Operation: Update user by userId
 DELETE /users/{userId}
 Operation: Delete user by userID
 ```
+
 
