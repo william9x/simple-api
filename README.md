@@ -18,9 +18,7 @@ spring.jpa.hibernate.ddl-auto=update // Update database without destroy old sche
 
 ```
 All request must have this header:
-{
- Authentication: simple_api_key_for_authentication
-}
+**Authentication: simple_api_key_for_authentication**
 
 GET /users 
 Operation: Get all users
