@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,54 +38,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
 
     private UserDTO userDTO;
-    private UserFullDetailsResponse userFullDetailsResponse;
-    private UserDetailsResponse userDetailsResponse;
+    private UserEntity userEntity;
 
     @Autowired
     private MockMvc mvc;
 
-//    @InjectMocks
-//    private UserController userController;
-
     @MockBean
     private UserService userService;
 
-//    @Mock
-//    private IUserRepository userRepository;
-
-
-
     @BeforeEach
     void setUp() {
-        //MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.initMocks(this);
 
         userDTO = new UserDTO();
         userDTO.setUsername("test DTO");
         userDTO.setEmail("test@test.com");
         userDTO.setAddress("test address");
 
-        userFullDetailsResponse = new UserFullDetailsResponse();
-        userDetailsResponse = new UserDetailsResponse();
+        userEntity = new UserEntity();
+        userEntity.setUsername("test Entity");
+        userEntity.setEmail("test@test.com");
+        userEntity.setAddress("test address");
     }
 
     @Test
-    void testGetAllUser() throws Exception{
+    void testGetAllUser() throws Exception {
         ArrayList<UserDTO> userDTOS = new ArrayList<>();
         userDTOS.add(userDTO);
 
-        //when(userService.getUser()).thenReturn(userDTOS);
-
-        given(userService.getUser()).willReturn(userDTOS);
-//        userFullDetailsResponse.setUsername(userDTO.getUsername());
-//
-//        ResponseEntity<?> getUsers = userController.getUser();
-//
-//        assertNotNull(getUsers);
-//        assertEquals(1, userDTOS.size());
-
-        mvc.perform(get("/api/users")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError());
+        when(userService.getUser()).thenReturn(userDTOS);
 
         mvc.perform(get("/api/users")
                 .header("Authentication", "simple_api_key_for_authentication")
@@ -93,44 +74,48 @@ class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    void testGetUser() {
-////
-//        when(userService.getUser(anyString())).thenReturn(userDTO);
-//
-//        ResponseEntity<?> userFullDetailsResponse = userController.getUser(anyString());
-//
-//        assertNotNull(userFullDetailsResponse);
-//    }
-//
-//    @Test
-//    void testCreateUser() {
-//
+    @Test
+    void testGetUser() throws Exception {
+
+        when(userService.getUser(anyString())).thenReturn(userDTO);
+
+        mvc.perform(get("/api/users/test")
+                .header("Authentication", "simple_api_key_for_authentication")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testCreateUser() throws Exception {
+
 //        when(userService.createUser(any(UserDTO.class))).thenReturn(userDTO);
 //
-//        ResponseEntity<?> userDetailsResponse = userController.createUser(new UserSignUpRequest());
+//        mvc.perform(post("/api/users")
+//                .header("Authentication", "simple_api_key_for_authentication")
 //
-//        assertNotNull(userDetailsResponse);
-//    }
-//
-//    @Test
-//    void testUpdateUser() {
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void testUpdateUser() {
 //
 //        when(userService.updateUser(anyString(), any(UserDTO.class))).thenReturn(userDTO);
 //
 //        ResponseEntity<?> userDetailsResponse = userController.updateUser("",new UserUpdateRequest());
 //
 //        assertNotNull(userDetailsResponse);
-//    }
+    }
+
+    @Test
+    void testDeleteUser() throws Exception {
+
+//        when(userRepository.findByUserId(anyString())).thenReturn(userEntity);
 //
-//    @Test
-//    void testDeleteUser() {
-//
-//        when(userRepository.findByUserId(anyString())).thenReturn(new UserEntity());
-//
-//        ResponseEntity<?> operationStatus = userController.deleteUser("");
-//
-//        assertNotNull(operationStatus);
-//    }
+//        mvc.perform(delete("/api/users/test")
+//                .header("Authentication", "simple_api_key_for_authentication")
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk());
+    }
 
 }

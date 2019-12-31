@@ -1,5 +1,6 @@
 package simpleapi2.controller.user;
 
+import com.sun.istack.NotNull;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -28,10 +29,10 @@ public class UserController {
 
     @ApiOperation(value = "Get all user", response = OperationStatus.class, responseContainer = "List")
     @ApiResponses({
-            @ApiResponse(code = 200, message="OK"),
-            @ApiResponse(code = 403, message="Forbidden"),
-            @ApiResponse(code = 404, message="Not found"),
-            @ApiResponse(code = 500, message="Internal Server Error"),
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @GetMapping()
     public ResponseEntity<?> getUser() {
@@ -57,12 +58,12 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value="Get a user by userId", response = OperationStatus.class)
+    @ApiOperation(value = "Get a user by userId", response = OperationStatus.class)
     @ApiResponses({
-            @ApiResponse(code = 200, message="OK"),
-            @ApiResponse(code = 403, message="Forbidden"),
-            @ApiResponse(code = 404, message="Not found"),
-            @ApiResponse(code = 500, message="Internal Server Error"),
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @GetMapping(path = "/{usernameOrEmail}")
     public ResponseEntity<?> getUser(@PathVariable String usernameOrEmail) {
@@ -88,11 +89,11 @@ public class UserController {
 
     }
 
-    @ApiOperation(value="Create a user", response = OperationStatus.class)
+    @ApiOperation(value = "Create a user", response = OperationStatus.class)
     @ApiResponses({
-            @ApiResponse(code = 201, message="Created"),
-            @ApiResponse(code = 403, message="Forbidden"),
-            @ApiResponse(code = 500, message="Internal Server Error"),
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody @Valid UserSignUpRequest userSignUpRequest) {
@@ -119,11 +120,11 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value="Update a user by userId", response = OperationStatus.class)
+    @ApiOperation(value = "Update a user by userId", response = OperationStatus.class)
     @ApiResponses({
-            @ApiResponse(code = 201, message="Updated"),
-            @ApiResponse(code = 403, message="Forbidden"),
-            @ApiResponse(code = 500, message="Internal Server Error"),
+            @ApiResponse(code = 201, message = "Updated"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PutMapping(path = "/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody @Valid UserUpdateRequest userUpdateRequest) {
@@ -151,16 +152,16 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value="Delete user by userId", response = OperationStatus.class)
+    @ApiOperation(value = "Delete user by userId", response = OperationStatus.class)
     @ApiResponses({
-            @ApiResponse(code = 200, message="OK"),
-            @ApiResponse(code = 403, message="Forbidden"),
-            @ApiResponse(code = 500, message="Internal Server Error"),
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable String userId) {
-
         OperationStatus operationStatus;
+
         boolean deletedUser = userService.deleteUser(userId);
 
         if (false == deletedUser) {
