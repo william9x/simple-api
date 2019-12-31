@@ -53,4 +53,3 @@ DELETE /users/{userId}
 Operation: Delete user by userID
 ```
 
-### Live demo: http://oasisvn.tk:1604/
