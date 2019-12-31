@@ -16,6 +16,6 @@ spring.jpa.hibernate.ddl-auto=update // Update database without destroy old sche
 
 4. Requests
 
-After projects run successfully, open http://localhost:1604/swagger-ui.html in browser for API document
+After project run successfully, open http://localhost:1604/swagger-ui.html in browser for API document
 
 
