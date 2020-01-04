@@ -1,6 +1,5 @@
 package simpleapi2.controller.user;
 
-import com.sun.istack.NotNull;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -145,10 +144,10 @@ public class UserController {
             UserDetailsResponse returnValue = new UserDetailsResponse();
             BeanUtils.copyProperties(updatedUser, returnValue);
 
-            operationStatus = new OperationStatus(HttpStatus.CREATED.value(),
+            operationStatus = new OperationStatus(HttpStatus.OK.value(),
                     SuccessResponse.UPDATED_RECORD.getSuccessResponse(), returnValue);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(operationStatus);
+            return ResponseEntity.status(HttpStatus.OK).body(operationStatus);
         }
     }
 
