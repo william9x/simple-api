@@ -19,6 +19,7 @@ import simpleapi2.io.request.UserUpdateRequest;
 import simpleapi2.repository.user.IUserRepository;
 
 import java.text.ParseException;
+import java.util.Base64;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,8 +45,26 @@ class UserControllerItegrationTest {
     }
 
     @Test
+    void testUpdateUser() throws Exception {
+
+        createTestUser("email@1.com", "username1");
+
+        UserUpdateRequest req = new UserUpdateRequest();
+        req.setEmail("update@email.com");
+        req.setAddress("test");
+
+        mvc.perform(put("/api/users/username1")
+                .header("Authentication", "simple_api_key_for_authentication")
+                .content(asJsonString(req))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.email").value(req.getEmail()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.address").value(req.getAddress()))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
     void testGetAllUser() throws Exception {
-        createTestUser("test@test.com");
 
         mvc.perform(get("/api/users")
                 .header("Authentication", "simple_api_key_for_authentication")
@@ -57,11 +76,11 @@ class UserControllerItegrationTest {
 
     @Test
     void testGetUser() throws Exception {
-        mvc.perform(get("/api/users/test@test.com")
+        mvc.perform(get("/api/users/username1")
                 .header("Authentication", "simple_api_key_for_authentication")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.email").value("test@test.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.username").value("username1"))
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -69,9 +88,9 @@ class UserControllerItegrationTest {
     void testCreateUser() throws Exception {
 
         UserSignUpRequest req = new UserSignUpRequest();
-        req.setUsername("test123");
-        req.setEmail("test123@test.com");
-        req.setAddress("test");
+        req.setUsername("testCreateUser");
+        req.setEmail("test@CreateUser.com");
+        req.setAddress("testCreateUser");
 
         mvc.perform(post("/api/users")
                 .header("Authentication", "simple_api_key_for_authentication")
@@ -82,38 +101,26 @@ class UserControllerItegrationTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
-    @Test
-    void testUpdateUser() throws Exception {
-
-        UserUpdateRequest req = new UserUpdateRequest();
-        req.setAddress("test update address");
-
-        mvc.perform(put("/api/users/testId")
-                .header("Authentication", "simple_api_key_for_authentication")
-                .content(asJsonString(req))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.address").value(req.getAddress()))
-                .andDo(MockMvcResultHandlers.print());
-    }
 
     @Test
     void testDeleteUser() throws Exception {
 
-        mvc.perform(delete("/api/users/testId")
+        mvc.perform(delete("/api/users/username1")
                 .header("Authentication", "simple_api_key_for_authentication")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
     }
 
-    private void createTestUser(String email) throws ParseException {
+    private void createTestUser(String email, String username) throws ParseException {
+
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("testEntity");
         userEntity.setEmail(email);
-        userEntity.setAddress("testAddress");
-        userEntity.setUserId("testId");
-        userRepository.save(userEntity);
+        userEntity.setUsername(username);
+        userEntity.setUserId(username);
+        userEntity.setAddress("");
+
+        userRepository.saveAndFlush(userEntity);
     }
 
     private static String asJsonString(final Object obj) {
