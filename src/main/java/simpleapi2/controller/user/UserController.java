@@ -40,7 +40,9 @@ public class UserController {
         ArrayList<UserDTO> userDTOS = userService.getUser();
 
         if (null == userDTOS) {
-            operationStatus = new OperationStatus(HttpStatus.NOT_FOUND.value(), ErrorResponse.NO_RECORD_FOUND.getErrorMessage(), null);
+            operationStatus = new OperationStatus(HttpStatus.NOT_FOUND.value(),
+                    ErrorResponse.NO_RECORD_FOUND.getErrorMessage(), null);
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(operationStatus);
 
         } else {
@@ -52,7 +54,10 @@ public class UserController {
                 userFullDetailsResponses.add(userFullDetailsResponse);
             }
 
-            operationStatus = new OperationStatus(HttpStatus.OK.value(), SuccessResponse.FOUND_RECORD.getSuccessResponse(), userFullDetailsResponses);
+            operationStatus = new OperationStatus(HttpStatus.OK.value(),
+                    SuccessResponse.FOUND_RECORD.getSuccessResponse(),
+                    userFullDetailsResponses);
+
             return ResponseEntity.status(HttpStatus.OK).body(operationStatus);
         }
     }
@@ -81,7 +86,8 @@ public class UserController {
             BeanUtils.copyProperties(userDTO, returnValue);
 
             operationStatus = new OperationStatus(HttpStatus.OK.value(),
-                    SuccessResponse.FOUND_RECORD.getSuccessResponse(), returnValue);
+                    SuccessResponse.FOUND_RECORD.getSuccessResponse(),
+                    returnValue);
 
             return ResponseEntity.status(HttpStatus.OK).body(operationStatus);
         }

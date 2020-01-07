@@ -10,12 +10,12 @@ import simpleapi2.middleware.security.filters.AuthenticationFilter;
 public class FiltersConfig {
 
     @Bean
-    public FilterRegistrationBean<AuthenticationFilter> authFilter(){
+    public FilterRegistrationBean<AuthenticationFilter> authFilter() {
         FilterRegistrationBean<AuthenticationFilter> registrationBean
                 = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new AuthenticationFilter());
-        registrationBean.addUrlPatterns("/api/**");
+        registrationBean.addUrlPatterns("/api/*");
 
         return registrationBean;
     }

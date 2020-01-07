@@ -11,8 +11,6 @@ import java.io.IOException;
 
 public class AuthenticationFilter implements Filter {
 
-    private final String API_KEY = "simple_api_key_for_authentication";
-
     @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,
@@ -20,7 +18,9 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        String authenticationHeader = req.getHeader("Authentication");
+        final String API_KEY = "simple_api_key_for_authentication";
+        final String authenticationHeader = req.getHeader("Authentication");
+
 
         if (null == authenticationHeader || false == authenticationHeader.equals(API_KEY)) {
             res.sendError(HttpStatus.UNAUTHORIZED.value(), ErrorResponse.AUTHENTICATION_FAILED.getErrorMessage());

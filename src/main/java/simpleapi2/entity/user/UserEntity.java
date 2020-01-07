@@ -7,11 +7,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity(name="users")
-public class UserEntity {
+public class UserEntity implements Serializable {
+
+    private static final long serialVersionUID = 8017631105467339170L;
 
     @Id
     @GeneratedValue

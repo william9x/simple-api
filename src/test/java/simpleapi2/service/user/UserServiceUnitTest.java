@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
-class UserServiceTest {
+class UserServiceUnitTest {
 
     private UserEntity userEntity;
     private UserDTO userDTO;
